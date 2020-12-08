@@ -14,7 +14,7 @@ public class RoadCell : MonoBehaviour
             return location;
         }
         set
-        { 
+        {
             location = value;
             transform.localPosition = value.Position;
         }

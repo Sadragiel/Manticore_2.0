@@ -7,20 +7,10 @@ namespace Assets.GameStrategy
     public class RoadBuilding : GameStrategy
     {
         RoadCell currentCell;
-        int rotation;
         [SerializeField]
         public bool[] roadDirections;
 
         bool isAvailableToSet;
-
-        HexGrid grid
-        {
-            get
-            {
-                return GameManager.Instance.hexGrid;
-            }
-        }
-
 
         public override void Start()
         {
@@ -56,6 +46,7 @@ namespace Assets.GameStrategy
             RoadCell roadcell = DataController.Instance.GetRoadCell();
             roadcell.transform.SetParent(grid.transform, false);
             roadcell.setMaterial(cellData.material);
+            roadcell.name = cellData.name;
 
             roadDirections = new bool[cellData.directions.Length];
             Array.Copy(cellData.directions, roadDirections, roadDirections.Length);
@@ -210,6 +201,7 @@ namespace Assets.GameStrategy
             if (isAvailableToSet)
             {
                 //set up previous cell
+                currentCell.Location.name = currentCell.name;
                 currentCell.Location.SetAchievableNeighbors(roadDirections);
                 ActivateLocationsIfNeeded();
 

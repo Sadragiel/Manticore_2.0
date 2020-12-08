@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Assets.DataStructures;
+using System;
 
 public class HexGrid : MonoBehaviour
 {
@@ -52,7 +53,7 @@ public class HexGrid : MonoBehaviour
 		hexMesh.Triangulate(cells);
 	}
 
-	public HexCell getCell(int i)
+	public HexCell GetCell(int i)
     {
 		return cells[i];
     }
@@ -64,7 +65,7 @@ public class HexGrid : MonoBehaviour
 		hexMesh.Triangulate(cells);
 	}
 
-	public void ColorCell(HexCell cell, Color color)
+    public void ColorCell(HexCell cell, Color color)
 	{
 		if (cell == null)
 			return;
@@ -78,6 +79,21 @@ public class HexGrid : MonoBehaviour
 		HexCoordinates coordinates = HexCoordinates.FromPosition(position);
 		int index = coordinates.X + coordinates.Z * width + coordinates.Z / 2;
 		return index >= 0 && index < cells.Length ? cells[index] : null;
+	}
+
+	public HexCell GetFreeCell(string name)
+	{
+		foreach(HexCell cell in cells)
+        {
+			if(
+				cell != null
+				&& cell.unit == null
+				&& cell.name.Equals(name))
+            {
+				return cell;
+            }
+        }
+		return null;
 	}
 
 	void CreateCell(int x, int z, int i)

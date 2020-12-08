@@ -14,6 +14,8 @@ public class HexCell : MonoBehaviour
     [SerializeField]
     public bool[] isNeighborAchievable;
 
+    public HexUnit unit;
+
     public string locationName;
 
     public Vector3 Position

@@ -108,7 +108,6 @@ public class HexGrid : MonoBehaviour
 		cell.transform.localPosition = position;
 		cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
 		cell.color = defaultColor;
-		cell.i = i;
 
 		if (x > 0)
 		{
@@ -154,6 +153,15 @@ public class HexGrid : MonoBehaviour
 					cells[cellCoordinate].name = location.name;
 					cells[cellCoordinate].color = location.color;
 					cells[cellCoordinate].defaultColor = location.color;
+					cells[cellCoordinate].artifactStock = location.artifactStock;
+					if(location.artifactHost == cellCoordinate)
+                    {
+						cells[cellCoordinate].UpdateArtifactsIcon();
+                    }
+					else
+                    {
+						cells[cellCoordinate].artifactHost = cells[location.artifactHost];
+					}
 				}
             }
         }
@@ -163,5 +171,16 @@ public class HexGrid : MonoBehaviour
         {
 			cell?.SetAchievableWithinLocation();
         }
+	}
+
+	public HexCell getHexCellFromPointer()
+	{
+		Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+		if (Physics.Raycast(inputRay, out hit))
+		{
+			return GetCell(hit.point);
+		}
+		return null;
 	}
 }

@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
-using Assets.DataStructures;
+using Assets.Artifacts;
+using System.Collections.Generic;
 
 public class HexCell : MonoBehaviour
 {
     public HexCoordinates coordinates;
     public Color color;
     public Color defaultColor;
+    public ArtifactIcon artifactIcon;
 
-    [SerializeField]
-    public int i;
     [SerializeField]
     HexCell[] neighbors;
     [SerializeField]
     public bool[] isNeighborAchievable;
 
     public HexUnit unit;
+    public List<Artifact> artifactStock;
+    public HexCell artifactHost;
 
     public string locationName;
 
@@ -29,6 +31,17 @@ public class HexCell : MonoBehaviour
     public HexCell GetNeighbor(HexDirection direction)
     {
         return neighbors[(int)direction];
+    }
+
+    public HexDirection? GetDirectionOfNeighbor(HexCell neighbor)
+    {
+        for(int i = 0; i < this.neighbors.Length; i++)
+        {
+            if (this.neighbors[i] == neighbor)
+                return (HexDirection)i;
+        }
+
+        return null;
     }
 
     public void SetNeighbor(HexDirection direction, HexCell cell)
@@ -73,6 +86,12 @@ public class HexCell : MonoBehaviour
         return isNeighborAchievable[(int)direction];
     }
 
+    public bool IsNeighborAchievable(HexCell neighbor)
+    {
+        HexDirection? direction = this.GetDirectionOfNeighbor(neighbor);
+        return direction != null && IsNeighborAchievable((HexDirection)direction);
+    }
+
     public void SetAchievableNeighbors(bool[] directions)
     {
         isNeighborAchievable = directions;
@@ -95,6 +114,7 @@ public class HexCell : MonoBehaviour
     {
         locationName = DataController.Instance.emptyLocationName;
         defaultColor = Color.white;
+        artifactStock = new List<Artifact>();
     }
 
     public bool isBusy()
@@ -105,5 +125,19 @@ public class HexCell : MonoBehaviour
                 return true;
         }
         return false;
+    }
+
+    public void UpdateArtifactsIcon()
+    {
+        HexCell host = artifactHost ?? this;
+        if(artifactStock != null && artifactStock.Count != 0)
+        {
+            host.artifactIcon.setIconMaterial(artifactStock[0].material);
+            host.artifactIcon.enabled = true;
+        }
+        else
+        {
+            host.artifactIcon.enabled = false;
+        }
     }
 }

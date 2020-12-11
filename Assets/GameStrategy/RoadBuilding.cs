@@ -30,16 +30,7 @@ namespace Assets.GameStrategy
             MoveCellToPointer();
         }
 
-        HexCell getHexCellFromPointer()
-        {
-            Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(inputRay, out hit))
-            {
-                return grid.GetCell(hit.point);
-            }
-            return null;
-        }
+        
 
         RoadCell CreateCell(Cell cellData)
         {
@@ -217,7 +208,7 @@ namespace Assets.GameStrategy
 
         void MoveCellToPointer()
         {
-            HexCell cell = getHexCellFromPointer();
+            HexCell cell = grid.getHexCellFromPointer();
 
             if (currentCell != null && cell != null && currentCell.Location != cell)
             {

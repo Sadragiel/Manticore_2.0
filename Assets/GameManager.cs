@@ -24,13 +24,13 @@ public class GameManager : MonoBehaviour
     {
 		get
         {
-			return strategies[currentStrategy];
+			return strategies?[currentStrategy];
         }
     }
 
 	void Update()
 	{
-		Strategy.Update();
+		Strategy?.Update();
 	}
 
 	void Start()
@@ -41,7 +41,8 @@ public class GameManager : MonoBehaviour
 
 	void Awake()
     {
-    }
+		
+	}
 
 	public void RunNextStrategy()
 	{
@@ -54,5 +55,35 @@ public class GameManager : MonoBehaviour
 		strategies = DataController.Instance.GetStrategies();
 		currentStrategy = -1;
 		RunNextStrategy();
+	}
+
+	bool isCharacterMovementstrategyEnabled()
+    {
+		// TODO: find a way to avoid hardcodding
+		return currentStrategy == 0;
+	}
+
+	public void EndTurn()
+    {
+		if(isCharacterMovementstrategyEnabled()) 
+		{
+			((CharactersActions)Strategy).NextTurn();
+		}
+    }
+
+	public void OpenArtifactManagementDialog()
+	{
+		if (isCharacterMovementstrategyEnabled())
+		{
+			((CharactersActions)Strategy).OpenArtifactManagementDialog(null);
+		}
+	}
+
+	public void CloseArtifactManagementDialog()
+	{
+		if (isCharacterMovementstrategyEnabled())
+		{
+			((CharactersActions)Strategy).CloseArtifactManagementDialog();
+		}
 	}
 }

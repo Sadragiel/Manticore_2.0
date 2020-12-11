@@ -1,5 +1,7 @@
-﻿using Assets.DataStructures;
+﻿using Assets.Artifacts;
+using Assets.DataStructures;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace Assets.GameStrategy
 {
@@ -15,6 +17,9 @@ namespace Assets.GameStrategy
      */
     class CharactersActions : GameStrategy
     {
+        Button skipTurnButton;
+        ArtifactManagement artifactManager;
+
         HexUnit currentUnit {
             get
             {
@@ -26,22 +31,26 @@ namespace Assets.GameStrategy
 
         List<HexUnit> units;
 
-        public override void Update()
+        public CharactersActions(Button skipTurnButton, ArtifactManagement artifactManager)
         {
-            HandleClick(nextTurn);
+            this.skipTurnButton = skipTurnButton;
+            this.skipTurnButton.onClick.AddListener(EndTurn);
+            this.artifactManager = artifactManager;
         }
 
-        void nextTurn()
+        public override void Update()
         {
-            if(currentUnitIndex != -1)
-            {
-                currentUnit.Deactivate();
-            }
+        }
 
+        void EndTurn()
+        {
+            currentUnit.EndTurn();
+        }
+
+        public void NextTurn()
+        {
             currentUnitIndex = (currentUnitIndex + 1) % units.Count;
-
-            currentUnit.Activate();
-
+            currentUnit.TakeTurn();
         }
 
         public override void Start()
@@ -49,14 +58,14 @@ namespace Assets.GameStrategy
             base.Start();
             units = new List<HexUnit>();
             setCharactersOnInitiaPosition();
-            nextTurn();
+            NextTurn();
         }
 
         HexUnit CreateUnit(CharacterMeta metadata)
         {
             HexUnit hexUnit = DataController.Instance.GetHexUnit();
             hexUnit.transform.SetParent(grid.transform, false);
-            hexUnit.setMaterial(metadata.material);
+            hexUnit.SetMetadata(metadata);
             return hexUnit;
         }
 
@@ -76,12 +85,15 @@ namespace Assets.GameStrategy
             }
         }
 
-        //HexUnit CreateUnit(HexCell cell)
-        //{
-        //    HexUnit unit = Instantiate(DataController.Instance.unitPrefab);
-        //    unit.transform.SetParent(hexGrid.transform, false);
-        //    unit.Location = cell;
-        //    return unit;
-        //}
+        public void OpenArtifactManagementDialog(List<Artifact> targetArtifacts)
+        {
+            var list = targetArtifacts ?? currentUnit.Location.artifactStock;
+            artifactManager.OpenDialog(currentUnit.equipped, currentUnit.bag, list, targetArtifacts != null);
+        }
+
+        public void CloseArtifactManagementDialog()
+        {
+            artifactManager.CloseDialog();
+        }
     }
 }

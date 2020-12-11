@@ -15,6 +15,10 @@ public class ArtifactManagement : MonoBehaviour
     public Sprite bagIcon;
     public Sprite locationIcon;
 
+    public GameObject endTurnButton;
+    public GameObject openDialogButton;
+    public GameObject closeDialogButton;
+
     public GameObject[] artifactHolders;
 
     ArtifactHolder[] holders;
@@ -69,12 +73,6 @@ public class ArtifactManagement : MonoBehaviour
         selectedPreview.selfIndex = newContainer.list.Count - 1;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     public void OpenDialog (
         List<Artifact> heroEquipped,
         List<Artifact> heroBag,
@@ -105,16 +103,25 @@ public class ArtifactManagement : MonoBehaviour
             holders[2].DrawList(targetStock, 2, this);
         }
 
+        updateVisibilityOfSidePanelButtons(true);
         self.SetActive(true);
     }
 
     public void CloseDialog()
     {
+        updateVisibilityOfSidePanelButtons(false);
         self.SetActive(false);
+
         foreach (ArtifactHolder holder in holders)
         {
-            //Destroy(holder);
             holder.transform.parent = null;
         }
+    }
+
+    void updateVisibilityOfSidePanelButtons(bool isOpened)
+    {
+        closeDialogButton.SetActive(isOpened);
+        endTurnButton.SetActive(!isOpened);
+        openDialogButton.SetActive(!isOpened);
     }
 }

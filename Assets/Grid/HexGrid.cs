@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using Assets.DataStructures;
 using System;
+using System.Collections.Generic;
 
 public class HexGrid : MonoBehaviour
 {
@@ -94,6 +95,19 @@ public class HexGrid : MonoBehaviour
             }
         }
 		return null;
+	}
+
+	public List<HexCell> GetCellsByName(string name)
+	{
+		List<HexCell> list = new List<HexCell>();
+		foreach (HexCell cell in cells)
+		{
+			if (cell != null && cell.name.Equals(name))
+			{
+				list.Add(cell);
+			}
+		}
+		return list;
 	}
 
 	void CreateCell(int x, int z, int i)

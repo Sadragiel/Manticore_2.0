@@ -8,6 +8,9 @@ namespace Assets.DataStructures
         public string name;
         public string initLocation;
 
+        public HexUnit unitPrefab;
+        public bool isEnemy;
+
         public int MAX_HP;
         public int MAX_STAMINA;
         public int ATK;
@@ -26,7 +29,9 @@ namespace Assets.DataStructures
             int MAGIC_ATK,
             int RANGE_ATK,
             int DEF,
-            int MAGIC_DEF
+            int MAGIC_DEF,
+            bool isEnemy,
+            HexUnit unitPrefab
         ) {
             this.name = name;
             this.material = material;
@@ -38,6 +43,8 @@ namespace Assets.DataStructures
             this.RANGE_ATK = RANGE_ATK;
             this.DEF = DEF;
             this.MAGIC_DEF = MAGIC_DEF;
+            this.isEnemy = isEnemy;
+            this.unitPrefab = unitPrefab;
         }
     }
 }

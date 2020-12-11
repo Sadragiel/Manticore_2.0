@@ -17,7 +17,6 @@ namespace Assets.GameStrategy
      */
     class CharactersActions : GameStrategy
     {
-        Button skipTurnButton;
         ArtifactManagement artifactManager;
 
         HexUnit currentUnit {
@@ -33,8 +32,7 @@ namespace Assets.GameStrategy
 
         public CharactersActions(Button skipTurnButton, ArtifactManagement artifactManager)
         {
-            this.skipTurnButton = skipTurnButton;
-            this.skipTurnButton.onClick.AddListener(EndTurn);
+            skipTurnButton.onClick.AddListener(EndTurn);
             this.artifactManager = artifactManager;
         }
 
@@ -61,11 +59,15 @@ namespace Assets.GameStrategy
             NextTurn();
         }
 
-        HexUnit CreateUnit(CharacterMeta metadata)
+        HexUnit CreateUnit(CharacterMeta metadata, HexCell location)
         {
-            HexUnit hexUnit = DataController.Instance.GetHexUnit();
+            HexUnit hexUnit = DataController.Instance.GetHexUnit(metadata.unitPrefab);
             hexUnit.transform.SetParent(grid.transform, false);
             hexUnit.SetMetadata(metadata);
+            if(location != null)
+            {
+                hexUnit.Location = location;
+            }
             return hexUnit;
         }
 
@@ -75,13 +77,21 @@ namespace Assets.GameStrategy
 
             foreach(CharacterMeta metadata in metadataArray)
             {
-                HexCell cell = grid.GetFreeCell(metadata.initLocation);
-                HexUnit unit = CreateUnit(metadata);
-                if(cell != null && unit != null)
+                List<HexCell> cellList;
+                if(metadata.initLocation.Equals(DataController.Instance.castleName))
                 {
-                    unit.Location = cell;
-                    units.Add(unit);
+                    cellList = new List<HexCell>();
+                    cellList.Add(grid.GetFreeCell(metadata.initLocation));
                 }
+                else
+                {
+                    cellList = grid.GetCellsByName(metadata.initLocation);
+                }
+                cellList.ForEach(cellItem =>
+                {
+                    HexUnit unit = CreateUnit(metadata, cellItem);
+                    units.Add(unit);
+                });
             }
         }
 

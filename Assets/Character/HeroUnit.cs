@@ -7,7 +7,7 @@ namespace Assets.Character
     {
         public void Update()
         {
-            if (!isMyTurn)
+            if (!isMyTurn || GameManager.Instance.IsDialogOpened)
                 return;
 
             if (Input.GetMouseButtonUp(0))
@@ -25,8 +25,6 @@ namespace Assets.Character
 
         protected void HandleInput()
         {
-            Debug.Log("here i go");
-
             HexCell targetCell = grid.getHexCellFromPointer();
             if (!CheckInteractionAvailability(targetCell))
             {

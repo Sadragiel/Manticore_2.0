@@ -33,6 +33,7 @@ public class HexUnit : MonoBehaviour
     public int DEF;
     public int MAGIC_DEF;
 
+    public bool isEnemy;
 
     public HexCell Location
     {
@@ -64,6 +65,7 @@ public class HexUnit : MonoBehaviour
 
     public void SetMetadata(CharacterMeta metadata)
     {
+        name = metadata.name;
         MAX_HP = metadata.MAX_HP;
         HP = metadata.MAX_HP;
         MAX_STAMINA = metadata.MAX_STAMINA;
@@ -73,6 +75,7 @@ public class HexUnit : MonoBehaviour
         RANGE_ATK = metadata.RANGE_ATK;
         DEF = metadata.DEF;
         MAGIC_DEF = metadata.MAGIC_DEF;
+        isEnemy = metadata.isEnemy;
         preview.GetComponent<MeshRenderer>().material = metadata.material;
     }
 
@@ -81,7 +84,7 @@ public class HexUnit : MonoBehaviour
         STAMINA = MAX_STAMINA;
     }
 
-    public void TakeTurn()
+    public virtual void TakeTurn()
     {
         RestoreStamina();
         isMyTurn = true;

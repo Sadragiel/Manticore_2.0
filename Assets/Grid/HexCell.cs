@@ -10,7 +10,7 @@ public class HexCell : MonoBehaviour
     public ArtifactIcon artifactIcon;
 
     [SerializeField]
-    HexCell[] neighbors;
+    public HexCell[] neighbors;
     [SerializeField]
     public bool[] isNeighborAchievable;
 

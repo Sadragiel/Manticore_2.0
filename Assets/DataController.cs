@@ -22,7 +22,8 @@ public class DataController : MonoBehaviour
     public Button skipTurnButton;
     public ArtifactManagement artifactManager;
 
-    public HexUnit unitPrefab;
+    public HexUnit characterPrefab;
+    public HexUnit monsterPrefab;
     public RoadCell roadcellPrefab;
 
     public static int NUMBER_OF_DIRECTIONS = 6;
@@ -88,12 +89,15 @@ public class DataController : MonoBehaviour
         _instance.activeLocations = new ArrayList();
         _instance.activeLocations.Add(_instance.castleName);
 
-        _instance.charactersData = new CharacterMeta[4]
+        _instance.charactersData = new CharacterMeta[7]
         {
-            new CharacterMeta(_instance.charactersMaterials[0], "Archer", _instance.castleName, 10, 100, 1, 3, 3, 1, 3),
-            new CharacterMeta(_instance.charactersMaterials[1], "Mage", _instance.castleName, 10, 2, 1, 4, 3, 2, 4),
-            new CharacterMeta(_instance.charactersMaterials[2], "Tank", _instance.castleName, 10, 3, 2, 3, 1, 3, 3),
-            new CharacterMeta(_instance.charactersMaterials[3], "Knight", _instance.castleName, 10, 4, 3, 2, 1, 2, 2),
+            new CharacterMeta(_instance.charactersMaterials[0], "Archer", _instance.castleName, 10, 100, 1, 3, 3, 1, 3, false, _instance.characterPrefab),
+            new CharacterMeta(_instance.charactersMaterials[1], "Mage", _instance.castleName, 10, 2, 1, 4, 3, 2, 4, false, _instance.characterPrefab),
+            new CharacterMeta(_instance.charactersMaterials[2], "Tank", _instance.castleName, 10, 3, 2, 3, 1, 3, 3, false, _instance.characterPrefab),
+            new CharacterMeta(_instance.charactersMaterials[3], "Knight", _instance.castleName, 10, 4, 3, 2, 1, 2, 2, false, _instance.characterPrefab),
+            new CharacterMeta(_instance.charactersMaterials[4], "MonsterLvl4", _instance.monster_lvl4_road, 4, 1, 4, 4, 4, 4, 4, true, _instance.monsterPrefab),
+            new CharacterMeta(_instance.charactersMaterials[5], "MonsterLvl3", _instance.monster_lvl3_road, 3, 1, 3, 3, 3, 3, 3, true, _instance.monsterPrefab),
+            new CharacterMeta(_instance.charactersMaterials[6], "MonsterAgro", _instance.monster_agro_road, 3, 1, 3, 3, 3, 3, 3, true, _instance.monsterPrefab),
         };
     }
 
@@ -160,8 +164,8 @@ public class DataController : MonoBehaviour
     {
         return new GameStrategy[2]
         {
-            new CharactersActions(skipTurnButton, artifactManager),
             new RoadBuilding(),
+            new CharactersActions(skipTurnButton, artifactManager),
         };
     }
 
@@ -175,9 +179,9 @@ public class DataController : MonoBehaviour
         activeLocations.Add(locationName);
     }
 
-    public HexUnit GetHexUnit()
+    public HexUnit GetHexUnit(HexUnit prefab)
     {
-        return Instantiate(Instance.unitPrefab);
+        return Instantiate(prefab);
     }
 
     public RoadCell GetRoadCell()

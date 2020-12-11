@@ -20,6 +20,12 @@ public class GameManager : MonoBehaviour
 	public GameStrategy[] strategies;
 	int currentStrategy;
 
+	bool isDialogOpened;
+	public bool IsDialogOpened
+    {
+		get => isDialogOpened;
+    }
+
 	private GameStrategy Strategy
     {
 		get
@@ -60,7 +66,7 @@ public class GameManager : MonoBehaviour
 	bool isCharacterMovementstrategyEnabled()
     {
 		// TODO: find a way to avoid hardcodding
-		return currentStrategy == 0;
+		return currentStrategy == 1;
 	}
 
 	public void EndTurn()
@@ -75,6 +81,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (isCharacterMovementstrategyEnabled())
 		{
+			isDialogOpened = true;
 			((CharactersActions)Strategy).OpenArtifactManagementDialog(null);
 		}
 	}
@@ -83,6 +90,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (isCharacterMovementstrategyEnabled())
 		{
+			isDialogOpened = false;
 			((CharactersActions)Strategy).CloseArtifactManagementDialog();
 		}
 	}

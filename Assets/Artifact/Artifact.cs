@@ -12,13 +12,15 @@ namespace Assets.Artifacts
     {
         public Material material;
         public Sprite image;
+        public WeaponType type;
         string name;
-        int bonus;
+        public int bonus;
         bool isConsumable;
 
-        public Artifact(string name, int bonus, bool isConsumable, Material material, Sprite image)
+        public Artifact(string name, WeaponType type, int bonus, bool isConsumable, Material material, Sprite image)
         {
             this.name = name;
+            this.type = type;
             this.bonus = bonus;
             this.isConsumable = isConsumable;
             this.material = material;

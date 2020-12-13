@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using Assets.GameStrategy;
+using Assets.MenuScripts.Fight;
+using Assets.MenuScripts.HeroOverviewPanel;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,6 +18,9 @@ public class GameManager : MonoBehaviour
 	}
 
 	public HexGrid hexGrid;
+	public FightDialog fightDialog;
+	public HeroOverviewPanel overviewPanel;
+	public GameObject sidePanelButtonHolder;
 
 	public GameStrategy[] strategies;
 	int currentStrategy;
@@ -77,12 +82,29 @@ public class GameManager : MonoBehaviour
 		}
     }
 
+	public void HandleDeath(HexUnit deadUnit)
+    {
+		if(isCharacterMovementstrategyEnabled()) 
+		{
+			((CharactersActions)Strategy).HandleDeath(deadUnit);
+		}
+    }
+
 	public void OpenArtifactManagementDialog()
 	{
 		if (isCharacterMovementstrategyEnabled())
 		{
 			isDialogOpened = true;
 			((CharactersActions)Strategy).OpenArtifactManagementDialog(null);
+		}
+	}
+
+	public void OpenArtifactManagementDialog(HexUnit unit)
+	{
+		if (isCharacterMovementstrategyEnabled())
+		{
+			isDialogOpened = true;
+			((CharactersActions)Strategy).OpenArtifactManagementDialog(unit.bag);
 		}
 	}
 
@@ -93,5 +115,33 @@ public class GameManager : MonoBehaviour
 			isDialogOpened = false;
 			((CharactersActions)Strategy).CloseArtifactManagementDialog();
 		}
+	}
+
+	public void InitFight(HexUnit attacker, HexUnit defender, bool randomWeapon)
+    {
+		isDialogOpened = true;
+		fightDialog.OpenDialog(attacker, defender, randomWeapon);
+	}
+
+	public void SetDialogState(bool isDialogOpened)
+    {
+		this.isDialogOpened = isDialogOpened;
+    }
+
+	public void ShowOverviewPanel()
+    {
+		overviewPanel.self.SetActive(true);
+		sidePanelButtonHolder.SetActive(true);
+
+	}
+
+	public void SetCharacterInfo(HexUnit unit)
+	{
+		overviewPanel.SetCharacterInfo(unit);
+	}
+
+	public HexUnit GetActiveUnit()
+    {
+		return isCharacterMovementstrategyEnabled() ? ((CharactersActions)Strategy).currentUnit : null;
 	}
 }

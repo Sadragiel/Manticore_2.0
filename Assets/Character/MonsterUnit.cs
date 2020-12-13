@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Character
 {
-    class MonsterUnit : HexUnit
+    public class MonsterUnit : HexUnit
     {
         List<HexCell> way;
 
@@ -22,6 +22,10 @@ namespace Assets.Character
                 new List<HexCell>()
             );
 
+            if (!canReachCastle)
+            {
+                return;
+            }
 
             for (int i = 0; i < possibleWays.Count; i++)
             {
@@ -37,7 +41,6 @@ namespace Assets.Character
             List<List<HexCell>> possibleWays,
             List<HexCell> visitedCells
         ) {
-
             // The end of field
             if (currentCell == null)
                 return false;
@@ -70,7 +73,8 @@ namespace Assets.Character
                         possibleWays,
                         visitedCells
                     );
-                    if(successfullyReachedCastle)
+
+                    if (successfullyReachedCastle)
                     {
                         canReachCastle = true;
                         // Current cell should be added on the first position
@@ -106,24 +110,24 @@ namespace Assets.Character
                 HexUnit unitToAttack = GetUnitToAttack();
                 if(unitToAttack != null)
                 {
-                    Attack(unitToAttack);
+                    Attack(unitToAttack, false);
                     continue;
                 }
 
-                if(way == null)
+                if (way == null)
                 {
                     SetupSelfWay();
                 }
                 if (way == null)
                     break;
 
-                if(way.Count == 0)
+                if (way.Count == 0)
                 {
                     // TODO: ATTACK CASTLE
                     break;
                 }
                 HexCell targetCell = way[0];
-                if(targetCell.unit != null)
+                if(targetCell.unit == null)
                 {
                     Location = way[0];
                     RemoveLastCellFromWay();
@@ -151,12 +155,6 @@ namespace Assets.Character
             return null;
         }
 
-        void Attack(HexUnit unit)
-        {
-            STAMINA--;
-            // TODO
-        }
-         
         void RefreshWayIfNeeded()
         {
 

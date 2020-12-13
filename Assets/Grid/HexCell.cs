@@ -10,6 +10,8 @@ public class HexCell : MonoBehaviour
     public ArtifactIcon artifactIcon;
 
     [SerializeField]
+    public int i;
+    [SerializeField]
     public HexCell[] neighbors;
     [SerializeField]
     public bool[] isNeighborAchievable;
@@ -105,7 +107,7 @@ public class HexCell : MonoBehaviour
                 directedCell != null
                 && directedCell.IsLocation())
             {
-                directedCell.isNeighborAchievable[i] = true;
+                directedCell.isNeighborAchievable[(int)direction.Opposite()] = true;
             }
         }
     }

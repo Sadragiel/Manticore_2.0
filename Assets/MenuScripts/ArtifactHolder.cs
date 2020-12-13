@@ -31,9 +31,8 @@ public class ArtifactHolder : MonoBehaviour
         this.manager = manager;
         for (int i = 0; i < artifactList.Count; i++)
         {
-            ArtifactPreview preview = Instantiate(previewPrefab);
+            ArtifactPreview preview = Instantiate(previewPrefab, holder.transform);
             preview.setArtifact(artifactList[i], i, selfIndex, manager);
-            preview.transform.SetParent(holder.transform);
         }
     }
 

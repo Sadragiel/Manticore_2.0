@@ -5,6 +5,7 @@ namespace Assets.DataStructures
     public struct CharacterMeta
     {
         public Material material;
+        public Sprite previewImage;
         public string name;
         public string initLocation;
 
@@ -20,7 +21,8 @@ namespace Assets.DataStructures
         public int MAGIC_DEF;
 
         public CharacterMeta(
-            Material material, 
+            Material material,
+            Sprite previewImage,
             string name, 
             string initLocation,
             int MAX_HP,
@@ -35,6 +37,7 @@ namespace Assets.DataStructures
         ) {
             this.name = name;
             this.material = material;
+            this.previewImage = previewImage;
             this.initLocation = initLocation;
             this.MAX_HP = MAX_HP;
             this.MAX_STAMINA = MAX_STAMINA;

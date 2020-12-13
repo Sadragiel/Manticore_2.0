@@ -45,8 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f440c7bd99564549a9f22b839ff78f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  self: {fileID: 797398182622678889}
   preview: {fileID: 797398182649055098}
   selection: {fileID: 7233046643120951027}
+  previewImage: {fileID: 0}
   MAX_HP: 0
   HP: 0
   MAX_STAMINA: 0

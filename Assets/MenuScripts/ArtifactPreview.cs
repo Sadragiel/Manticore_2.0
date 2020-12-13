@@ -9,6 +9,7 @@ public class ArtifactPreview : MonoBehaviour
     public Button clickDetector;
     public Image image;
     public Image background;
+    public Text bonusLabel;
 
     public int selfIndex;
     public int holderIndex;
@@ -29,6 +30,7 @@ public class ArtifactPreview : MonoBehaviour
     public void setArtifact(Artifact artifact, int selfIndex, int holderIndex, ArtifactManagement manager)
     {
         image.sprite = artifact.image;
+        bonusLabel.text = artifact.bonus.ToString();
         this.selfIndex = selfIndex;
         this.holderIndex = holderIndex;
 

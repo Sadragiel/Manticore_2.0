@@ -2,6 +2,7 @@
 using Assets.DataStructures;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using Assets.MenuScripts.HeroOverviewPanel;
 
 namespace Assets.GameStrategy
 {
@@ -19,7 +20,7 @@ namespace Assets.GameStrategy
     {
         ArtifactManagement artifactManager;
 
-        HexUnit currentUnit {
+        public HexUnit currentUnit {
             get
             {
                 return units[currentUnitIndex];
@@ -27,6 +28,8 @@ namespace Assets.GameStrategy
         }
 
         int currentUnitIndex = -1;
+
+        int TurnNumber = 0;
 
         List<HexUnit> units;
 
@@ -48,12 +51,21 @@ namespace Assets.GameStrategy
         public void NextTurn()
         {
             currentUnitIndex = (currentUnitIndex + 1) % units.Count;
+            if(currentUnitIndex == 0)
+            {
+                TurnNumber++;
+                if(TurnNumber == 10)
+                {
+                    DataController.Instance.ManticoreMovementAvailable = true;
+                }
+            }
             currentUnit.TakeTurn();
         }
 
         public override void Start()
         {
             base.Start();
+            GameManager.Instance.ShowOverviewPanel();
             units = new List<HexUnit>();
             setCharactersOnInitiaPosition();
             NextTurn();
@@ -104,6 +116,18 @@ namespace Assets.GameStrategy
         public void CloseArtifactManagementDialog()
         {
             artifactManager.CloseDialog();
+        }
+
+        public void HandleDeath(HexUnit deadUnit)
+        {
+            DataController.Instance.ManticoreMovementAvailable = true;
+            int indexOfDeadUnit = units.IndexOf(deadUnit);
+            if(currentUnitIndex <= indexOfDeadUnit)
+            {
+                currentUnitIndex--;
+            }
+
+            units.Remove(deadUnit);
         }
     }
 }

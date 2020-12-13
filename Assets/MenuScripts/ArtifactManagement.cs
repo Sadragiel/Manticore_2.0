@@ -7,6 +7,8 @@ public class ArtifactManagement : MonoBehaviour
 {
     public GameObject self;
 
+    HexUnit activatorUnit;
+
     List<Artifact> heroEquipped;
     List<Artifact> heroBag;
     List<Artifact> targetStock;
@@ -62,7 +64,17 @@ public class ArtifactManagement : MonoBehaviour
         previousContainer.list.RemoveAt(selectedArtifactIndex);
         previousContainer.holder.UpdateButtonHolderVisibility(false);
 
+        if(selectedHolderIndex == 0)
+        {
+            GameManager.Instance.GetActiveUnit()?.ApplyArtifactBonus(artifact, false);
+        }
+
         int targetHolderIndex = (selectedHolderIndex + delta + holders.Length) % holders.Length;
+
+        if (targetHolderIndex == 0)
+        {
+            GameManager.Instance.GetActiveUnit()?.ApplyArtifactBonus(artifact, true);
+        }
 
         (List<Artifact> list, ArtifactHolder holder) newContainer = getArtifactContainers(targetHolderIndex);
         newContainer.list.Add(artifact);
@@ -88,8 +100,7 @@ public class ArtifactManagement : MonoBehaviour
         holders = new ArtifactHolder[numberOfHolders];
         for(int i = 0; i < numberOfHolders; i++)
         {
-            holders[i] = Instantiate(artifactListPrefab);
-            holders[i].transform.SetParent(artifactHolders[i].transform);
+            holders[i] = Instantiate(artifactListPrefab, artifactHolders[i].transform);
         }
 
         holders[0].SetIcon(heroIcon);

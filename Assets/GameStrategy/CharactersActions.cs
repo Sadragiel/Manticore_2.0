@@ -3,6 +3,7 @@ using Assets.DataStructures;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using Assets.MenuScripts.HeroOverviewPanel;
+using UnityEngine;
 
 namespace Assets.GameStrategy
 {
@@ -23,6 +24,7 @@ namespace Assets.GameStrategy
         public HexUnit currentUnit {
             get
             {
+                Debug.Log($"CurrentUnitIndex - {currentUnitIndex}");
                 return units[currentUnitIndex];
             }
         }
@@ -65,7 +67,7 @@ namespace Assets.GameStrategy
         public override void Start()
         {
             base.Start();
-            GameManager.Instance.ShowOverviewPanel();
+            GameManager.Instance.SetStateOverviewPanel(true);
             units = new List<HexUnit>();
             setCharactersOnInitiaPosition();
             NextTurn();
@@ -122,12 +124,36 @@ namespace Assets.GameStrategy
         {
             DataController.Instance.ManticoreMovementAvailable = true;
             int indexOfDeadUnit = units.IndexOf(deadUnit);
-            if(currentUnitIndex <= indexOfDeadUnit)
+
+            Debug.Log($"currentUnitIndex({currentUnitIndex}) --- indexOfDeadUnit({indexOfDeadUnit})");
+
+            if(currentUnitIndex >= indexOfDeadUnit)
             {
                 currentUnitIndex--;
             }
 
             units.Remove(deadUnit);
+
+            if(units.Find(unit => !unit.isEnemy) == null)
+            {
+                GameManager.Instance.Defeat(false);
+            }
+        }
+
+        public void AttackCastle()
+        {
+            units.ForEach(unit =>
+            {
+                if (!unit.isEnemy)
+                {
+                    unit.TakeDamage(3);
+                }
+            });
+        }
+
+        public List<HexUnit> GetUnits()
+        {
+            return units;
         }
     }
 }

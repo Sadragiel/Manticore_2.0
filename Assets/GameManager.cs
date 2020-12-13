@@ -2,6 +2,7 @@
 using Assets.GameStrategy;
 using Assets.MenuScripts.Fight;
 using Assets.MenuScripts.HeroOverviewPanel;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,10 +27,13 @@ public class GameManager : MonoBehaviour
 	int currentStrategy;
 
 	bool isDialogOpened;
+	public bool isManticoreDead;
 	public bool IsDialogOpened
     {
 		get => isDialogOpened;
     }
+
+	public EndGameState endGameState;
 
 	private GameStrategy Strategy
     {
@@ -57,7 +61,7 @@ public class GameManager : MonoBehaviour
 
 	public void RunNextStrategy()
 	{
-		currentStrategy++;
+		currentStrategy = (currentStrategy + 1) % strategies.Length;
 		Strategy.Start();
 	}
 
@@ -71,7 +75,7 @@ public class GameManager : MonoBehaviour
 	bool isCharacterMovementstrategyEnabled()
     {
 		// TODO: find a way to avoid hardcodding
-		return currentStrategy == 1;
+		return currentStrategy == 2;
 	}
 
 	public void EndTurn()
@@ -128,11 +132,10 @@ public class GameManager : MonoBehaviour
 		this.isDialogOpened = isDialogOpened;
     }
 
-	public void ShowOverviewPanel()
+	public void SetStateOverviewPanel(bool state)
     {
-		overviewPanel.self.SetActive(true);
-		sidePanelButtonHolder.SetActive(true);
-
+		overviewPanel.self.SetActive(state);
+		sidePanelButtonHolder.SetActive(state);
 	}
 
 	public void SetCharacterInfo(HexUnit unit)
@@ -144,4 +147,34 @@ public class GameManager : MonoBehaviour
     {
 		return isCharacterMovementstrategyEnabled() ? ((CharactersActions)Strategy).currentUnit : null;
 	}
+
+	public void AttackCastle()
+    {
+		if (isCharacterMovementstrategyEnabled())
+		{
+			((CharactersActions)Strategy).AttackCastle();
+		}
+	}
+
+	void EndTheGame()
+    {
+		SetStateOverviewPanel(false);
+		RunNextStrategy();
+	}
+
+	public void Defeat(bool manticoreReachedCastle)
+    {
+		endGameState = manticoreReachedCastle ? EndGameState.Lose : EndGameState.GreatLose;
+		EndTheGame();
+	}
+
+	public void Win()
+	{
+		if (!isCharacterMovementstrategyEnabled())
+			return;
+		List<HexUnit> units = ((CharactersActions)Strategy).GetUnits();
+		endGameState = units.FindAll(unit => unit.isEnemy).Count == 1 ? EndGameState.GreatVictory : EndGameState.Victory;
+		EndTheGame();
+	}
+
 }

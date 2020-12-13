@@ -60,6 +60,12 @@ public class DataController : MonoBehaviour
 
     public Sprite[] WeaponTypes;
 
+    public GameObject endgameDialog;
+    public Image endgameDialogImage;
+    public Text message;
+    public Sprite victoryImage;
+    public Sprite loseImage;
+
     public bool ManticoreMovementAvailable;
 
     private static void Initialize()
@@ -99,11 +105,11 @@ public class DataController : MonoBehaviour
 
         _instance.charactersData = new CharacterMeta[8]
         {
-            new CharacterMeta(_instance.charactersMaterials[0], _instance.charecterSprites[0], "Archer", _instance.castleName, 1, 100, 1, 3, 1, 1, 3, false, _instance.characterPrefab),
+            new CharacterMeta(_instance.charactersMaterials[0], _instance.charecterSprites[0], "Archer", _instance.castleName, 100, 100, 100, 100, 100, 100, 3, false, _instance.characterPrefab),
             new CharacterMeta(_instance.charactersMaterials[1], _instance.charecterSprites[1], "Mage", _instance.castleName, 10, 2, 1, 4, 3, 2, 4, false, _instance.characterPrefab),
             new CharacterMeta(_instance.charactersMaterials[2], _instance.charecterSprites[2], "Tank", _instance.castleName, 10, 3, 2, 3, 1, 3, 3, false, _instance.characterPrefab),
             new CharacterMeta(_instance.charactersMaterials[3], _instance.charecterSprites[3], "Knight", _instance.castleName, 10, 4, 3, 2, 1, 2, 2, false, _instance.characterPrefab),
-            new CharacterMeta(_instance.charactersMaterials[4], _instance.charecterSprites[4], "MonsterLvl4", _instance.monster_lvl4_road, 4, 1, 4, 4, 4, 4, 4, true, _instance.monsterPrefab),
+            new CharacterMeta(_instance.charactersMaterials[4], _instance.charecterSprites[4], "MonsterLvl4", _instance.monster_lvl4_road, 4, 1, 99, 99, 99, 99, 99, true, _instance.monsterPrefab),
             new CharacterMeta(_instance.charactersMaterials[5], _instance.charecterSprites[5], "MonsterLvl3", _instance.monster_lvl3_road, 3, 1, 3, 3, 3, 3, 3, true, _instance.monsterPrefab),
             new CharacterMeta(_instance.charactersMaterials[6], _instance.charecterSprites[6], "MonsterAgro", _instance.monster_agro_road, 3, 1, 3, 3, 3, 3, 3, true, _instance.monsterPrefab),
             new CharacterMeta(_instance.charactersMaterials[7], _instance.charecterSprites[7], "Manticore", _instance.manticoreName, 3, 1, 3, 3, 3, 3, 3, true, _instance.manticorePrefab),
@@ -171,10 +177,12 @@ public class DataController : MonoBehaviour
 
     public GameStrategy[] GetStrategies()
     {
-        return new GameStrategy[2]
+        return new GameStrategy[4]
         {
+            new MainMenu(),
             new RoadBuilding(),
             new CharactersActions(skipTurnButton, artifactManager),
+            new EndGame(endgameDialog, endgameDialogImage, message, victoryImage, loseImage)
         };
     }
 

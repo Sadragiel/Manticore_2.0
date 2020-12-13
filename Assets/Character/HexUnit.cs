@@ -102,18 +102,24 @@ public class HexUnit : MonoBehaviour
         GameManager.Instance.EndTurn();
     }
 
+    protected virtual void Die()
+    {
+        GameManager.Instance.HandleDeath(this);
+        if (isMyTurn)
+        {
+            EndTurn();
+        }
+        Location.unit = null;
+        Location.unit = null;
+        self.SetActive(false);
+    }
+
     public bool TakeDamage(int damage)
     {
         HP -= damage;
         if (HP <= 0)
         {
-            GameManager.Instance.HandleDeath(this);
-            if (isMyTurn)
-            {
-                EndTurn();
-            }
-            Location.unit = null;
-            self.SetActive(false);
+            Die();
             return true;
         }
         return false;

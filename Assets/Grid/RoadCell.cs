@@ -5,6 +5,7 @@ using Assets.DataStructures;
 public class RoadCell : MonoBehaviour
 {
     public GameObject self;
+    public GameObject Highlight;
 
     HexCell location;
     public HexCell Location

@@ -57,6 +57,7 @@ namespace Assets.MenuScripts.Fight
         public void OpenDialog(HexUnit attacker, HexUnit defender, bool canChooseWeapon)
         {
             GameManager.Instance.SetDialogState(true);
+            BaskIsKil = false;
             firstFight = true;
             this.attacker = attacker;
             this.defender = defender;
@@ -199,6 +200,10 @@ namespace Assets.MenuScripts.Fight
                 firstFight = true;
                 self.SetActive(false);
                 GameManager.Instance.SetDialogState(false);
+                if (GameManager.Instance.isManticoreDead)
+                {
+                    GameManager.Instance.Win();
+                }
             }
         }
     }

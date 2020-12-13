@@ -158,7 +158,7 @@ namespace Assets.GameStrategy
 
         void MarkUnavailable()
         {
-            grid.ColorCell(currentCell.Location, Color.red);
+            currentCell.Highlight.SetActive(true);
             isAvailableToSet = false;
         }
 
@@ -166,7 +166,7 @@ namespace Assets.GameStrategy
         {
             if (currentCell.Location == null)
                 return;
-            grid.ColorCell(currentCell.Location, currentCell.Location.defaultColor);
+            currentCell.Highlight.SetActive(false);
             isAvailableToSet = true;
         }
 

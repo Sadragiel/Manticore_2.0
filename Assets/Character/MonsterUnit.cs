@@ -6,14 +6,14 @@ namespace Assets.Character
 {
     public class MonsterUnit : HexUnit
     {
-        List<HexCell> way;
+        protected List<HexCell> way;
 
         void RemoveLastCellFromWay()
         {
             way?.RemoveAt(0);
         }
 
-        public void SetupSelfWay()
+        public virtual void SetupSelfWay()
         {
             List<List<HexCell>> possibleWays = new List<List<HexCell>>();
             bool canReachCastle = SelectPossibleWay(
@@ -102,9 +102,20 @@ namespace Assets.Character
             return canReachCastle;
         }
 
+        public virtual void AttackCastle()
+        {
+            GameManager.Instance.AttackCastle();
+        }
+
         public override void TakeTurn()
         {
             base.TakeTurn();
+
+            if (Location?.name.Equals(DataController.Instance.castleName) == true)
+            {
+                AttackCastle();
+            }
+
             while (STAMINA > 0)
             {
                 HexUnit unitToAttack = GetUnitToAttack();
@@ -123,7 +134,6 @@ namespace Assets.Character
 
                 if (way.Count == 0)
                 {
-                    // TODO: ATTACK CASTLE
                     break;
                 }
                 HexCell targetCell = way[0];
